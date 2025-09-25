@@ -45,17 +45,59 @@ module plate_cuts() {
 
 module screws() {
   switch_size = 14;
-  start = ((2 * body_margin) + body_padding) + switch_size;
-  step = 19;
 
-  for (i=[start:step:90]){
+  // top-left
+  x_start = ((2 * body_margin) + body_padding) + switch_size;
+  x_step = 3 * 19;
+
+  for (i=[x_start:x_step:90]){
     translate([i, -(screw_body_radius + 0.5 + body_margin + body_padding), 0])
-      #cylinder(h=body_height,r=screw_body_radius);
+      cylinder(h=body_height,r=screw_body_radius);
   }
+
+  // top-right
+  for (i=[body_length - x_start:-x_step:115]){
+    translate([i, -(screw_body_radius + 0.5 + body_margin + body_padding), 0])
+      cylinder(h=body_height,r=screw_body_radius);
+  } 
+
+  // bottom-left
+  for (i=[x_start:x_step:90]){
+    translate([i, -((2 * body_margin) + 48), 0])
+      cylinder(h=body_height,r=screw_body_radius);
+  }
+
+  // bottom-right
+  for (i=[body_length - x_start:-x_step:115]){
+    translate([i, -((2 * body_margin) + 48), 0])
+      cylinder(h=body_height,r=screw_body_radius);
+  }
+
+  // left-left
+  y_start = ((2 * body_margin) + body_padding) + switch_size;
+  y_step = 19;
+
+  for (i=[y_start:y_step:50]) {
+    translate([(screw_body_radius + 0.5 + body_margin + body_padding), -i, 0])
+      cylinder(h=body_height,r=screw_body_radius);
+  }
+
+  // right-right
+  for (i=[y_start:y_step:50]) {
+    translate([(body_length - screw_body_radius - 0.5 - body_margin - body_padding), -i, 0])
+      cylinder(h=body_height,r=screw_body_radius);
+  }
+
+  // super-bottom-left
+  translate([85.7, -72, 0])
+    #cylinder(h=body_height,r=screw_body_radius);
+
+  translate([152.5, -72, 0])
+    #cylinder(h=body_height,r=screw_body_radius);
 }
 
 difference() {
   plate();
   plate_cuts();
-  // screws();
+  screws();
 }
